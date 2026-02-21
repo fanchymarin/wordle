@@ -3,13 +3,17 @@ CC = gcc
 FLAGS = -Wall -Wextra -Werror
 
 OBJDIR = obj
-SOURCES = main.c
+SOURCES = main.c fetch_word.c
 OBJECTS := $(SOURCES:%.c=$(OBJDIR)/%.o)
+LDLIBS = -lcurl
 
 all: $(NAME)
 
+debug: FLAGS += -g
+debug: re
+
 $(NAME): $(OBJECTS)
-	$(CC) $(FLAGS) $^ -o $@
+	$(CC) $(FLAGS) $(LDLIBS) $^ -o $@
 
 $(OBJDIR)/%.o: %.c
 	mkdir -p $(OBJDIR)
