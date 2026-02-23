@@ -1,5 +1,49 @@
 #include "wordle.h"
 
+t_wordle_data wordle_data;
+
+char *select_color(char c, int c_pos)
+{
+  char *selected_color = calloc(8, sizeof(char));
+  
+  if (!c)
+    return selected_color;
+
+  for (int i = 0; wordle_data.answer[i]; i++)
+  {
+    if (wordle_data.answer[i] == c)
+    {
+      memcpy(selected_color, BOLD_YELLOW, 8);
+      if (i == c_pos)
+        return memcpy(selected_color, BOLD_GREEN, 8);
+    }
+  }
+  return selected_color;
+}
+
+void print_game()
+{
+  char letter = 0;
+  char* letter_color = NULL;
+  
+  printf("\n");
+  for (int i = 0; i < TRIES_NUM; i++)
+  {
+    for (int j = 0; j < WORD_SIZE; j++)
+    {
+      letter = wordle_data.responses[i][j];
+      letter_color = select_color(letter, j);
+      printf("%s%c%s ",
+        letter_color,
+        letter ? letter : '_',
+        COLOR_RESET);
+      free(letter_color);
+    }
+    printf("\n");
+  }
+  printf("\n");
+}
+
 char *all_caps(char *word)
 {
   for (int i = 0; word[i]; i++)
@@ -40,10 +84,11 @@ void wordle(char* word)
 {
   char input_word[BUFFER_SIZE];
 
-  all_caps(word);
-  printf("Wordle word: %s\n", word);
+  bzero(&wordle_data, sizeof(t_wordle_data));
+  strcpy(wordle_data.answer, all_caps(word));
+  print_game();
 
-  while (1)
+  while (wordle_data.response_index < TRIES_NUM)
   {
     printf("Enter a 5-letter word: ");
     fflush(stdout);
@@ -60,5 +105,8 @@ void wordle(char* word)
       printf("Word is not valid\n");
       continue;
     }
+
+    memcpy(wordle_data.responses[wordle_data.response_index++], all_caps(input_word), WORD_SIZE);
+    print_game();
   }
 }

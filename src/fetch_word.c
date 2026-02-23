@@ -3,31 +3,37 @@
 
 char errbuf[CURL_ERROR_SIZE];
 
-void curl_error(CURL *client, CURLcode result)
+void curl_error(CURLcode result)
 {
   size_t len = strlen(errbuf);
-  fprintf(stderr, "\nlibcurl: (%d) ", result);
+  fprintf(stderr, "libcurl error: (%d) ", result);
   if(len)
     fprintf(stderr, "%s%s", errbuf,
             ((errbuf[len - 1] != '\n') ? "\n" : ""));
   else
-    fprintf(stderr, "%s\n", curl_easy_strerror(result));  curl_easy_cleanup(client);
-  exit(EXIT_FAILURE);
+    fprintf(stderr, "%s\n", curl_easy_strerror(result));
 }
 
-void api_call()
+int api_call()
 {
+  int res_code = 0;
+
   CURL *client = curl_easy_init();
-  if (!client) return ;
+  if (!client) return 1;
 
   curl_easy_setopt(client, CURLOPT_URL, WORDLE_URL);
   curl_easy_setopt(client, CURLOPT_HTTPGET, 1L);
   curl_easy_setopt(client, CURLOPT_ERRORBUFFER, errbuf);
 
-  CURLcode result;
-  result = curl_easy_perform(client);
-  if(result != CURLE_OK) curl_error(client, result);
+  CURLcode result = curl_easy_perform(client);
+  if(result != CURLE_OK)
+  {
+    curl_error(result);
+    res_code = 1;
+  }
+
   curl_easy_cleanup(client);
+  return res_code;
 }
 
 char* parse_json(char *response)
@@ -40,7 +46,8 @@ char* parse_json(char *response)
 
 char* fetch_word()
 {
-  char buffer[BUF_LEN+1] = {0};
+  char buffer[BUFFER_SIZE + 1] = {0};
+  char* word = NULL;
   int out_pipe[2];
   int saved_stdout;
 
@@ -54,10 +61,18 @@ char* fetch_word()
   dup2(out_pipe[1], STDOUT_FILENO);
   close(out_pipe[1]);
 
-  api_call();
-  fflush(stdout);
-
-  read(out_pipe[0], buffer, BUF_LEN);
+  if (api_call())
+  {
+    memcpy(buffer, "NOCON", sizeof(buffer));
+    dup2(saved_stdout, STDOUT_FILENO);
+    word = strdup(buffer);
+  }
+  else
+  {
+    fflush(stdout);
+    read(out_pipe[0], buffer, BUFFER_SIZE);
+    word = parse_json(buffer);
+  }
   dup2(saved_stdout, STDOUT_FILENO);
-  return parse_json(buffer);
+  return word;
 }
