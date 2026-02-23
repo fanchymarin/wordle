@@ -15,6 +15,8 @@
 
 # define BOLD_GREEN "\e[1;32m"
 # define BOLD_YELLOW "\e[1;33m"
+# define GREEN "\e[32m"
+# define RED "\e[31m"
 # define COLOR_RESET "\e[0m"
 
 typedef struct s_wordle_data

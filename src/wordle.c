@@ -80,15 +80,19 @@ int is_word_valid(char* word)
   return is_wordle_word(word);
 }
 
-void wordle(char* word)
+void init_wordle(char* word)
 {
-  char input_word[BUFFER_SIZE];
-
   bzero(&wordle_data, sizeof(t_wordle_data));
   strcpy(wordle_data.answer, all_caps(word));
   print_game();
+}
 
-  while (wordle_data.response_index < TRIES_NUM)
+void wordle(char* word)
+{
+  char input_word[BUFFER_SIZE];
+  init_wordle(word);
+
+  while (1)
   {
     printf("Enter a 5-letter word: ");
     fflush(stdout);
@@ -106,7 +110,23 @@ void wordle(char* word)
       continue;
     }
 
-    memcpy(wordle_data.responses[wordle_data.response_index++], all_caps(input_word), WORD_SIZE);
+    memcpy(
+      wordle_data.responses[wordle_data.response_index++],
+      all_caps(input_word),
+      WORD_SIZE);
+
     print_game();
+
+    if (wordle_data.response_index == TRIES_NUM)
+    {
+      printf("%sGame over!%s The answer was: %s\n", RED, COLOR_RESET, wordle_data.answer);
+      break;
+    }
+    else if (!strcmp(
+      wordle_data.responses[wordle_data.response_index - 1], wordle_data.answer))
+    {
+      printf("%sCongratulations!%s 🎉 You've guessed the word!\n", GREEN, COLOR_RESET);
+      break;
+    }
   }
 }
