@@ -29,6 +29,7 @@ void print_game()
   printf("\n");
   for (int i = 0; i < TRIES_NUM; i++)
   {
+    printf("\t");
     for (int j = 0; j < WORD_SIZE; j++)
     {
       letter = wordle_data.responses[i][j];
@@ -94,7 +95,7 @@ void wordle(char* word)
 
   while (1)
   {
-    printf("Enter a 5-letter word: ");
+    printf("wordle> ");
     fflush(stdout);
     
     bzero(input_word, BUFFER_SIZE);
