@@ -7,8 +7,11 @@ OBJDIR = obj
 SRCDIR = src
 INCDIR = inc
 
-SOURCES = main.c fetch_word.c wordle.c
-OBJECTS := $(SOURCES:%.c=$(OBJDIR)/%.o)
+SOURCEFILES = main.c fetch_word.c wordle.c
+
+OBJECTS := $(SOURCEFILES:%.c=$(OBJDIR)/%.o)
+SOURCES := $(addprefix $(SRCDIR)/, $(SOURCEFILES))
+INCLUDES := $(wildcard $(INCDIR)/*.h)
 
 all: $(NAME)
 
@@ -18,12 +21,12 @@ debug: re
 $(NAME): $(OBJECTS)
 	$(CC) $(FLAGS) $(LDLIBS) $^ -o $@
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.c
+$(OBJDIR)/%.o: $(SRCDIR)/%.c $(INCLUDES)
 	mkdir -p $(OBJDIR)
 	$(CC) $(FLAGS) -I$(INCDIR) -c $< -o $@
 
 clean:
-	rm -rf $(OBJECTS) $(OBJDIR)
+	rm -rf $(OBJDIR)
 
 fclean: clean
 	rm -f $(NAME)
