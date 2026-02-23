@@ -1,17 +1,12 @@
 #include "wordle.h"
 
-void wordle(char* word)
-{
-  printf("Word of the day: %s\n", word);
-}
-
 int main()
 {
   char* word = fetch_word();
 
-  if (word == NULL)
+  if (!is_wordle_word(word))
   {
-    printf("Error fetching word\n");
+    fprintf(stderr, "Error fetching word\n");
     return EXIT_FAILURE;
   }
 

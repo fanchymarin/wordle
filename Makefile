@@ -1,13 +1,13 @@
 NAME = wordle
 CC = gcc
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra
 LDLIBS = -lcurl
 
 OBJDIR = obj
 SRCDIR = src
 INCDIR = inc
 
-SOURCES = main.c fetch_word.c
+SOURCES = main.c fetch_word.c wordle.c
 OBJECTS := $(SOURCES:%.c=$(OBJDIR)/%.o)
 
 all: $(NAME)
