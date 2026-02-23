@@ -35,9 +35,6 @@ char* parse_json(char *response)
   char *ch;
   ch = strtok(response, "\"");
   ch = strtok(NULL, "\"");
-  ch = strtok(NULL, "\"");
-  ch = strtok(NULL, "\"");
-
   return strdup(ch);
 }
 
