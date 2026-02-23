@@ -25,6 +25,11 @@ typedef struct s_wordle_data
   int response_index;
 } t_wordle_data;
 
+typedef struct s_curl_data {
+  char *memory;
+  size_t size;
+} t_curl_data;
+
 char* fetch_word();
 int is_wordle_word(char *word);
 void wordle(char* word);
