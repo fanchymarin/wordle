@@ -36,7 +36,10 @@ static size_t write_callback(void *contents, size_t size, size_t nmemb, void *us
 
 void configure_curl(CURL *curl, t_curl_data* chunk)
 {
-  curl_easy_setopt(curl, CURLOPT_URL, WORDLE_URL);
+  char url[BUFFER_SIZE];
+  snprintf(url, BUFFER_SIZE, WORDLE_URL, WORD_SIZE, DIFFICULTY);
+  
+  curl_easy_setopt(curl, CURLOPT_URL, url);
   curl_easy_setopt(curl, CURLOPT_HTTPGET, 1L);
   curl_easy_setopt(curl, CURLOPT_USERAGENT, "libcurl-agent/1.0");
   curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, errbuf);

@@ -7,9 +7,11 @@
 # include <stdio.h>
 # include <ctype.h>
 
-# define WORDLE_URL "https://random-word-api.herokuapp.com/word?length=5&diff=1"
+# define DIFFICULTY 1
 # define WORD_SIZE 5
 # define TRIES_NUM 5
+
+# define WORDLE_URL "https://random-word-api.herokuapp.com/word?length=%d&diff=%d"
 
 # define BUFFER_SIZE 2096
 
