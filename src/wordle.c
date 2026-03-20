@@ -118,15 +118,15 @@ void wordle(char* word)
 
     print_game();
 
-    if (wordle_data.response_index == TRIES_NUM)
-    {
-      printf("%sGame over!%s The answer was: %s\n", RED, COLOR_RESET, wordle_data.answer);
-      break;
-    }
-    else if (!strcmp(
+    if (!strcmp(
       wordle_data.responses[wordle_data.response_index - 1], wordle_data.answer))
     {
       printf("%sCongratulations!%s 🎉 You've guessed the word!\n", GREEN, COLOR_RESET);
+      break;
+    }
+    else if (wordle_data.response_index == TRIES_NUM)
+    {
+      printf("%sGame over!%s The answer was: %s\n", RED, COLOR_RESET, wordle_data.answer);
       break;
     }
   }
