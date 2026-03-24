@@ -1,6 +1,6 @@
 #include "wordle.h"
 
-t_wordle_data wordle_data;
+extern t_wordle_data wordle_data;
 
 char *select_color(char c, int c_pos)
 {
@@ -21,7 +21,7 @@ char *select_color(char c, int c_pos)
   return selected_color;
 }
 
-void print_game()
+void print_game_state()
 {
   char letter = 0;
   char* letter_color = NULL;
@@ -43,6 +43,21 @@ void print_game()
     printf("\n");
   }
   printf("\n");
+}
+
+void print_welcome_message()
+{
+  
+  printf("%s ____      ____   ___   _______     ______   _____     ________  \n", BOLD_GREEN);
+  printf("|_  _|    |_  _|.'   `.|_   __ \\   |_   _ `.|_   _|   |_   __  | \n");
+  printf("  \\ \\  /\\  / / /  .-.  \\ | |__) |    | | `. \\ | |       | |_ \\_| \n");
+  printf("   \\ \\/  \\/ /  | |   | | |  __ /     | |  | | | |   _   |  _| _  \n");
+  printf("    \\  /\\  /   \\  `-'  /_| |  \\ \\_  _| |_.' /_| |__/ | _| |__/ | \n");
+  printf("     \\/  \\/     `.___.'|____| |___|______.''|________||________| \n");
+  printf("                                                                 \n%s", COLOR_RESET);
+  printf("\nYou have %d tries to guess the word\n", TRIES_NUM);
+  printf("The word is %d letters long\n", WORD_SIZE);
+  printf("Good luck!\n\n");
 }
 
 char *all_caps(char *word)
@@ -79,55 +94,4 @@ int is_word_valid(char* word)
   }
 
   return is_wordle_word(word);
-}
-
-void init_wordle(char* word)
-{
-  bzero(&wordle_data, sizeof(t_wordle_data));
-  strcpy(wordle_data.answer, all_caps(word));
-  print_game();
-}
-
-void wordle(char* word)
-{
-  char input_word[BUFFER_SIZE];
-  init_wordle(word);
-
-  while (1)
-  {
-    printf("wordle> ");
-    fflush(stdout);
-    
-    bzero(input_word, BUFFER_SIZE);
-    if (fgets(input_word, BUFFER_SIZE, stdin) == NULL)
-    {
-      perror("Error getting input");
-      break;
-    }
-
-    if (!is_word_valid(input_word))
-    {
-      printf("Word is not valid\n");
-      continue;
-    }
-
-    memcpy(
-      wordle_data.responses[wordle_data.response_index++],
-      all_caps(input_word),
-      WORD_SIZE);
-
-    print_game();
-
-    if (!strcmp(
-      wordle_data.responses[wordle_data.response_index - 1], wordle_data.answer))
-    {
-      printf("%sCongratulations!%s 🎉 You've guessed the word!\n", GREEN, COLOR_RESET);
-      break;
-    }
-    else if (wordle_data.response_index == TRIES_NUM)
-    {
-      printf("%sGame over!%s The answer was: %s\n", RED, COLOR_RESET, wordle_data.answer);
-      break;
-    }
-  }
 }
