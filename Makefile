@@ -9,10 +9,11 @@ INCDIR = inc
 RESDIR = res
 
 SOURCEFILES = main.c fetch_word.c wordle.c trie_dict.c
+INCLUDEFILES = wordle.h trie_dict.h
 
 OBJECTS := $(SOURCEFILES:%.c=$(OBJDIR)/%.o)
 SOURCES := $(addprefix $(SRCDIR)/, $(SOURCEFILES))
-INCLUDES := $(wildcard $(INCDIR)/*.h)
+INCLUDES := $(addprefix $(INCDIR)/, $(INCLUDEFILES))
 
 all: $(NAME)
 
@@ -23,13 +24,13 @@ $(NAME): $(OBJECTS)
 	$(CC) $(FLAGS) $(LDLIBS) $^ -o $@
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c $(INCLUDES)
-	xxd -i $(RESDIR)/words.txt $(RESDIR)/words.h
+	xxd -i $(RESDIR)/words.txt $(INCDIR)/words.h
 	mkdir -p $(OBJDIR)
 	$(CC) $(FLAGS) -I$(INCDIR) -c $< -o $@
 
 clean:
 	rm -rf $(OBJDIR)
-	rm -rf $(RESDIR)/words.h
+	rm -rf $(INCDIR)/words.h
 
 fclean: clean
 	rm -f $(NAME)
