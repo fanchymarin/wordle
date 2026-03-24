@@ -17,6 +17,8 @@ typedef struct s_trie_node {
   bool terminal;
 } t_trie_node;
 
-t_trie_node *create_node();
+bool dict_insert(t_trie_node **root, char* word);
+bool dict_check(t_trie_node *root, char* word);
+void dict_print(t_trie_node *root);
 
 #endif

@@ -22,7 +22,7 @@ bool dict_insert(t_trie_node **root, char* word)
       exit(EXIT_FAILURE);
     }
 
-    t_trie_node **char_node = &tmp->children[CHAR_IDX(word[i])];
+    t_trie_node **char_node = &tmp->children[TO_INDEX(word[i])];
     if (*char_node == NULL)
     {
       *char_node = trie_create_node();
@@ -82,7 +82,7 @@ void print_trie_rec(t_trie_node *node, unsigned char *prefix, int length)
   }
 }
 
-void print_trie(t_trie_node *root)
+void dict_print(t_trie_node *root)
 {
   if (root == NULL)
   {

@@ -7,6 +7,8 @@
 # include <stdio.h>
 # include <ctype.h>
 
+#include "trie_dict.h"
+
 # define DIFFICULTY 1
 # define WORD_SIZE 5
 # define TRIES_NUM 5
@@ -23,8 +25,8 @@
 
 typedef struct s_wordle_data
 {
+  t_trie_node *dictionary;
   char answer[WORD_SIZE + 1];
-
   char responses[TRIES_NUM][WORD_SIZE + 1];
   int response_index;
 } t_wordle_data;

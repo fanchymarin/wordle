@@ -2,13 +2,15 @@
 
 t_wordle_data wordle_data;
 
-void init_wordle(char* word)
+t_trie_node *load_dictionary()
 {
-  bzero(&wordle_data, sizeof(t_wordle_data));
-  strcpy(wordle_data.answer, all_caps(word));
+  t_trie_node *dictionary = NULL;
+
+  dict_print(dictionary);
+  return dictionary;
 }
 
-int main()
+int init_wordle()
 {
   char* word = fetch_word();
 
@@ -18,11 +20,21 @@ int main()
     return EXIT_FAILURE;
   }
 
-  char input_word[BUFFER_SIZE];
-  init_wordle(word);
+  bzero(&wordle_data, sizeof(t_wordle_data));
+  wordle_data.dictionary = load_dictionary();
+  strcpy(wordle_data.answer, all_caps(word));
+  free(word);
   
   print_welcome_message();
   print_game_state();
+  return EXIT_SUCCESS;
+}
+
+int main()
+{
+  char input_word[BUFFER_SIZE];
+
+  init_wordle();
   while (1)
   {
     printf("wordle> ");
@@ -44,7 +56,8 @@ int main()
     memcpy(
       wordle_data.responses[wordle_data.response_index++],
       all_caps(input_word),
-      WORD_SIZE);
+      WORD_SIZE
+    );
 
     print_game_state();
 
@@ -60,7 +73,5 @@ int main()
       break;
     }
   }
-
-  free(word);
   return EXIT_SUCCESS;
 }
