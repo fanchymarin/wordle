@@ -37,11 +37,14 @@ typedef struct s_curl_data {
 } t_curl_data;
 
 char* fetch_word();
-int is_wordle_word(char *word);
+bool is_wordle_word(char *word);
+bool is_word_valid(char* word);
 void print_game_state();
 void print_welcome_message();
 void welcome_message();
 char *all_caps(char *word);
-int is_word_valid(char* word);
+int init_wordle();
+
+extern t_wordle_data wordle_data;
 
 #endif

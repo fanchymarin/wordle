@@ -8,7 +8,7 @@ SRCDIR = src
 INCDIR = inc
 RESDIR = res
 
-SOURCEFILES = main.c fetch_word.c wordle.c trie_dict.c
+SOURCEFILES = main.c fetch_word.c wordle.c trie_dict.c init.c
 INCLUDEFILES = wordle.h trie_dict.h
 
 OBJECTS := $(SOURCEFILES:%.c=$(OBJDIR)/%.o)

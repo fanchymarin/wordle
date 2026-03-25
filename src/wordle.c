@@ -1,7 +1,5 @@
 #include "wordle.h"
 
-extern t_wordle_data wordle_data;
-
 char *select_color(char c, int c_pos)
 {
   char *selected_color = calloc(8, sizeof(char));
@@ -67,31 +65,19 @@ char *all_caps(char *word)
   return word;
 }
 
-int is_wordle_word(char *word)
+bool is_wordle_word(char *word)
 {
   if (!word)
-    return 0;
+    return false;
 
   int word_len = strlen(word);
   if (word_len != WORD_SIZE)
-    return 0;
+    return false;
 
   for (int i = 0; i < word_len; i++)
   {
     if (!isalpha(word[i]))
-      return 0;
+      return false;
   }
-  return 1; 
-}
-
-int is_word_valid(char* word)
-{
-  int word_len = strlen(word);
-  for (int i = 0; i < word_len; i++)
-  {
-    if (word[i] == '\n')
-      word[i] = 0;
-  }
-
-  return is_wordle_word(word);
+  return dict_check(wordle_data.dictionary, word); 
 }
