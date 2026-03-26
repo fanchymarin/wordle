@@ -21,6 +21,13 @@ t_trie_node *load_dictionary()
   return dictionary;
 }
 
+char *load_random_word()
+{
+  // TODO: fetch random word from dict when fetching from API fails
+  exit(1);
+  //return dict_fetch_random();
+}
+
 int init_wordle()
 {
   bzero(&wordle_data, sizeof(t_wordle_data));
@@ -30,7 +37,8 @@ int init_wordle()
   if (!is_wordle_word(word))
   {
     fprintf(stderr, "Error fetching word\n");
-    return EXIT_FAILURE;
+    free(word);
+    word = load_random_word();
   }
 
   strcpy(wordle_data.answer, word);
