@@ -2,9 +2,16 @@
 #include "words.h"
 
 extern unsigned char res_words_txt[];
+extern unsigned int res_words_txt_len;
 
 t_trie_node *load_dictionary()
 {
+  if (res_words_txt_len == 0)
+  {
+    fprintf(stderr, "Error loading dictionary: Empty file\n");
+    exit(EXIT_FAILURE);
+  }
+
   t_trie_node *dictionary = NULL;
   char *current_line = (char *)res_words_txt;
 
